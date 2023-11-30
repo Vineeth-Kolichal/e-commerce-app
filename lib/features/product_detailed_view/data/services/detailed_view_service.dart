@@ -16,7 +16,7 @@ class DetailedViewServices {
     try {
       final cart = firestore.collection('cart');
       await cart.add({"productId": productId, "qty": 1});
-    } catch (e) {}
+    } catch (_) {}
   }
 
   Future<bool> checkDocExists(String docId) async {

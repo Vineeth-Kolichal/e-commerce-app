@@ -1,6 +1,8 @@
+import 'package:ecommerce_machine_test_jurysoft/common/controllers/firestore_provider.dart';
 import 'package:ecommerce_machine_test_jurysoft/features/cart/view/cart_page.dart';
 import 'package:ecommerce_machine_test_jurysoft/features/home_page/view/screen/home_screen.dart';
 import 'package:ecommerce_machine_test_jurysoft/features/main_screen/controller/bottom_nav_controller.dart';
+import 'package:ecommerce_machine_test_jurysoft/utils/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -38,30 +40,44 @@ class MainScreen extends ConsumerWidget {
             icon: SizedBox(
               height: 30,
               width: 35,
-              child: Stack(
-                children: [
-                  Icon(Iconsax.shopping_cart),
-                  Positioned(
-                    top: 0,
-                    right: 0,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Colors.red,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: Center(
-                          child: Text(
-                            "15",
-                            style: TextStyle(fontSize: 10, color: Colors.white),
+              child: StreamBuilder(
+                  stream: ref
+                      .watch(firestoreProvider)
+                      .collection('cart')
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    int length = 0;
+                    length = snapshot.data?.docs.length ?? 0;
+                    return Stack(
+                      children: [
+                        const Icon(Iconsax.shopping_cart),
+                        Visibility(
+                          visible: length != 0,
+                          child: Positioned(
+                            top: 0,
+                            right: 2,
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                color: AppTheme.redColor,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: Center(
+                                  child: Text(
+                                    "$length",
+                                    style: const TextStyle(
+                                        fontSize: 10,
+                                        color: AppTheme.whiteColor),
+                                  ),
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
+                        )
+                      ],
+                    );
+                  }),
             ),
             label: "Cart",
           ),
