@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "83356943671",
+    "project_id": "e-commerce-jurysoft",
+    "storage_bucket": "e-commerce-jurysoft.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:83356943671:android:776c135594b86cd940c6b2",
+        "android_client_info": {
+          "package_name": "com.example.ecommerce_machine_test_jurysoft"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAMWYPii4arTv2R7M9YneIsRpsyxosSGho"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
