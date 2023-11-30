@@ -1,5 +1,6 @@
 import 'package:ecommerce_machine_test_jurysoft/common/widgets/main_button.dart';
 import 'package:ecommerce_machine_test_jurysoft/common/widgets/space.dart';
+import 'package:ecommerce_machine_test_jurysoft/features/checkout/view/screen/checkout_screen.dart';
 import 'package:ecommerce_machine_test_jurysoft/features/product_detailed_view/controller/add_to_cart_controller.dart';
 import 'package:ecommerce_machine_test_jurysoft/features/product_detailed_view/controller/cart_check_controller.dart';
 import 'package:ecommerce_machine_test_jurysoft/features/product_detailed_view/controller/image_view_controller.dart';
@@ -186,6 +187,8 @@ class ProductDetailedView extends ConsumerWidget {
                       label: "Buy now",
                       buttonColor: AppTheme.yellowColor,
                       onPressed: () async {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (ctx) => CheckoutScreen()));
                         // final data = [
                         //   {
                         //     "pId": 1,

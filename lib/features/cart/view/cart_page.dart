@@ -2,6 +2,7 @@ import 'package:ecommerce_machine_test_jurysoft/common/widgets/main_button.dart'
 import 'package:ecommerce_machine_test_jurysoft/common/widgets/space.dart';
 import 'package:ecommerce_machine_test_jurysoft/features/cart/controller/cart_controller.dart';
 import 'package:ecommerce_machine_test_jurysoft/features/cart/data/model/cart_item_model.dart';
+import 'package:ecommerce_machine_test_jurysoft/features/checkout/view/screen/checkout_screen.dart';
 import 'package:ecommerce_machine_test_jurysoft/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -74,7 +75,10 @@ class CartPage extends StatelessWidget {
                   widthFactor: 0.5,
                   label: "Place order",
                   buttonColor: AppTheme.yellowColor,
-                  onPressed: () {})
+                  onPressed: () {
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (ctx) => CheckoutScreen()));
+                  })
             ],
           ),
         ),
@@ -97,8 +101,8 @@ class CartItem extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            height: 90,
-            width: 80,
+            height: 110,
+            width: 100,
             color: Colors.amber,
             child: Image.network(
               cartItemModel.product.images[0],
