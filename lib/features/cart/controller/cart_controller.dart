@@ -17,6 +17,18 @@ class CartController extends StateNotifier<CartState> {
     final data = await cartServices.getAllCartItems();
     state = CartData(data: data);
   }
+
+  Future<void> changeQty(int qty, String docId) async {
+    await cartServices.qtyChange(qty, docId).then((value) {
+      getCartItems();
+    });
+  }
+
+  Future<void> delete(String docId) async {
+    await cartServices.removeFromCart(docId).then((value) {
+      getCartItems();
+    });
+  }
 }
 
 abstract class CartState {}

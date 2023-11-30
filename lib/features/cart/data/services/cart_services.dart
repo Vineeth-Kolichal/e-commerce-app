@@ -33,4 +33,13 @@ class CartServices {
     }
     return cartData;
   }
+
+  Future<void> qtyChange(int qty, String docId) async {
+    final doc = firestore.collection('cart').doc(docId);
+    await doc.update({"qty": qty});
+  }
+
+  Future<void> removeFromCart(String docId) async {
+    await firestore.collection('cart').doc(docId).delete();
+  }
 }

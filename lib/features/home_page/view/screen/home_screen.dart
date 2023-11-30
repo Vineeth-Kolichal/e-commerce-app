@@ -14,6 +14,11 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final value = ref.watch(homeDataProvider);
+    List<String> banner = [
+      "https://img.freepik.com/free-vector/realism-hand-drawn-horizontal-banner_23-2150203461.jpg",
+      "https://i.pinimg.com/736x/b9/79/c5/b979c5c84dc4a82dc64171a0234aaba6.jpg",
+      "https://static.vecteezy.com/system/resources/previews/002/795/897/non_2x/cashback-promotion-banner-for-economy-ecommerce-financial-app-with-3d-hand-holding-and-touch-phone-with-blue-background-vector.jpg"
+    ];
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: AsyncValueWidget(
@@ -24,17 +29,12 @@ class HomeScreen extends ConsumerWidget {
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: CarouselSlider(
-                  items: [
-                    BannerSlideItem(
-                      bgColor: const Color.fromARGB(255, 2, 66, 95),
-                    ),
-                    BannerSlideItem(
-                      bgColor: const Color.fromARGB(255, 7, 99, 175),
-                    ),
-                    BannerSlideItem(
-                      bgColor: const Color.fromARGB(255, 49, 125, 224),
-                    ),
-                  ],
+                  items: List.generate(
+                      banner.length,
+                      (index) => BannerSlideItem(
+                            imagePath: banner[index],
+                            bgColor: const Color.fromARGB(255, 2, 66, 95),
+                          )),
                   options: CarouselOptions(
                     autoPlayInterval: Duration(seconds: 5),
                     height: 180.0,
@@ -161,12 +161,11 @@ class ProductGridItem extends StatelessWidget {
 }
 
 class BannerSlideItem extends StatelessWidget {
-  const BannerSlideItem({
-    super.key,
-    required this.bgColor,
-  });
+  const BannerSlideItem(
+      {super.key, required this.bgColor, required this.imagePath});
 
   final Color bgColor;
+  final String imagePath;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -176,6 +175,13 @@ class BannerSlideItem extends StatelessWidget {
       decoration: BoxDecoration(
         color: bgColor,
         borderRadius: BorderRadius.circular(8.0),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8.0),
+        child: Image.network(
+          imagePath,
+          fit: BoxFit.cover,
+        ),
       ),
     );
   }

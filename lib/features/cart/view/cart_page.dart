@@ -83,11 +83,11 @@ class CartPage extends StatelessWidget {
   }
 }
 
-class CartItem extends StatelessWidget {
+class CartItem extends ConsumerWidget {
   const CartItem({super.key, required this.cartItemModel});
   final CartItemModel cartItemModel;
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
     ValueNotifier<int> selectedNotifier = ValueNotifier(cartItemModel.qty);
     var items = [1, 2, 3, 4, 5];
     return Container(
@@ -162,6 +162,9 @@ class CartItem extends StatelessWidget {
                               }).toList(),
                               onChanged: (int? newValue) {
                                 selectedNotifier.value = newValue!;
+                                ref
+                                    .read(cartPageProvider.notifier)
+                                    .changeQty(newValue, cartItemModel.id);
                               },
                             );
                           }),
@@ -177,7 +180,11 @@ class CartItem extends StatelessWidget {
                       style: txt17BlackB,
                     ),
                     InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        ref
+                            .read(cartPageProvider.notifier)
+                            .delete(cartItemModel.id);
+                      },
                       child: Container(
                         padding: const EdgeInsets.all(5),
                         decoration: BoxDecoration(
