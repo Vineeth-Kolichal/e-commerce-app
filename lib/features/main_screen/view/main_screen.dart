@@ -1,3 +1,4 @@
+import 'package:ecommerce_machine_test_jurysoft/features/cart/view/cart_controller.dart';
 import 'package:ecommerce_machine_test_jurysoft/features/home_page/view/screen/home_screen.dart';
 import 'package:ecommerce_machine_test_jurysoft/features/main_screen/controller/bottom_nav_controller.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,6 +12,7 @@ class MainScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     int index = ref.watch(bottomNavProvider);
+    List<Widget> pages = [HomeScreen(), Container(), CartPage(), Container()];
     return Scaffold(
       appBar: AppBar(
         title: Text("home"),
@@ -21,7 +23,7 @@ class MainScreen extends ConsumerWidget {
               child: CupertinoSearchTextField(),
             )),
       ),
-      body: HomeScreen(),
+      body: pages[index],
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(

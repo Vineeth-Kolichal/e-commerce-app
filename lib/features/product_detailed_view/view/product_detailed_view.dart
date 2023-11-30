@@ -163,18 +163,22 @@ class ProductDetailedView extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Container(
-                height: size.width * 0.12,
-                width: size.width * 0.4,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: AppTheme.greyColor),
-                ),
-                child: Center(
-                    child: Text(
-                  'Add to cart',
-                  style: txt17BlackB,
-                )),
+              // Container(
+              //   height: size.width * 0.12,
+              //   width: size.width * 0.4,
+              //   decoration: BoxDecoration(
+              //     borderRadius: BorderRadius.circular(10),
+              //     border: Border.all(color: AppTheme.greyColor),
+              //   ),
+              //   child: Center(
+              //       child: Text(
+              //     'Add to cart',
+              //     style: txt17BlackB,
+              //   )),
+              // ),
+              MaterialButton(
+                onPressed: () {},
+                child: Text("Buy now"),
               ),
               Container(
                 margin: EdgeInsets.all(10),
