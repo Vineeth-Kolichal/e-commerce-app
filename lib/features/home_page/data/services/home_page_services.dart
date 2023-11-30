@@ -17,7 +17,9 @@ class HomeService {
     List<Product> productList = [];
     final data = await firestore.collection('Products').get();
     for (var x in data.docs) {
-      productList.add(Product.fromMap(x.data()));
+      final data = x.data();
+      data["docId"] = x.id;
+      productList.add(Product.fromMap(data));
     }
     return productList;
   }

@@ -27,6 +27,7 @@ class ProductListModel {
 }
 
 class Product {
+  String docId;
   int pId;
   String sTitile;
   String lTitile;
@@ -37,6 +38,7 @@ class Product {
   List<OtherDetail> otherDetails;
 
   Product({
+    required this.docId,
     required this.pId,
     required this.sTitile,
     required this.lTitile,
@@ -48,6 +50,7 @@ class Product {
   });
 
   factory Product.fromMap(Map<String, dynamic> json) => Product(
+        docId: json["docId"],
         pId: json["pId"],
         sTitile: json["sTitile"],
         lTitile: json["lTitile"],
@@ -60,6 +63,7 @@ class Product {
       );
 
   Map<String, dynamic> toMap() => {
+        "docId": docId,
         "pId": pId,
         "sTitile": sTitile,
         "lTitile": lTitile,

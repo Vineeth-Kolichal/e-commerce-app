@@ -1,6 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_machine_test_jurysoft/common/widgets/main_button.dart';
 import 'package:ecommerce_machine_test_jurysoft/common/widgets/space.dart';
+import 'package:ecommerce_machine_test_jurysoft/features/product_detailed_view/controller/add_to_cart_controller.dart';
+import 'package:ecommerce_machine_test_jurysoft/features/product_detailed_view/controller/cart_check_controller.dart';
 import 'package:ecommerce_machine_test_jurysoft/features/product_detailed_view/controller/image_view_controller.dart';
 import 'package:ecommerce_machine_test_jurysoft/utils/theme.dart';
 import 'package:flutter/material.dart';
@@ -9,13 +10,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../home_page/data/models/product_list_model.dart';
 
-class ProductDetailedView extends StatelessWidget {
+class ProductDetailedView extends ConsumerWidget {
   const ProductDetailedView({super.key, required this.product});
   final Product product;
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     Size size = MediaQuery.of(context).size;
-
+    ref.read(isExistProvider.notifier).isExist(product.docId);
     return Scaffold(
       appBar: AppBar(),
       body: Column(
@@ -46,7 +47,6 @@ class ProductDetailedView extends StatelessWidget {
                     children: [
                       SizedBox(
                         height: 50,
-                        //width: double.infinity,
                         child: ListView.separated(
                           scrollDirection: Axis.horizontal,
                           itemCount: product.images.length,
@@ -111,10 +111,6 @@ class ProductDetailedView extends StatelessWidget {
                       Space.y(10),
                       Row(
                         children: [
-                          // BoldTitleText(
-                          //   '₹${productModel.offerPrice}',
-                          //   fontSize: 30,
-                          // ),
                           Space.x(5),
                           Text(
                             '₹${product.price}',
@@ -127,14 +123,14 @@ class ProductDetailedView extends StatelessWidget {
                     ],
                   ),
                 ),
-                const Text('Other Details'),
+                const Text('  Other Details'),
                 Column(
                   children: List.generate(
                       product.otherDetails.length,
                       (index) => Container(
                             color: index % 2 != 0
                                 ? AppTheme.lightGreyColor1
-                                : AppTheme.whiteColor,
+                                : AppTheme.scaffoldBg,
                             child: Row(
                               children: [
                                 SizedBox(
@@ -162,67 +158,83 @@ class ProductDetailedView extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(
-            height: 60,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                MainButton(
-                  label: "Add to cart",
-                  buttonColor: const Color.fromRGBO(255, 255, 255, 1),
-                  onPressed: () {},
-                ),
-                MainButton(
-                  label: "Buy now",
-                  buttonColor: AppTheme.yellowColor,
-                  onPressed: () async {
-                    // final data = [
-                    //   {
-                    //     "pId": 1,
-                    //     "sTitile": "IPhone 14",
-                    //     "lTitile": "IPhone 11 236 GB Black",
-                    //     "discription":
-                    //         "With its sleek design, powerful processor, and stunning display, the iPhone is the perfect way to shop online.",
-                    //     "rating": 4.5,
-                    //     "price": 68444.50,
-                    //     "images": [
-                    //       "https://rukminim1.flixcart.com/image/850/1000/xif0q/mobile/1/d/y/-original-imaghxcpvtta2hzs.jpeg?q=90",
-                    //       "https://media-ik.croma.com/prod/https://media.croma.com/image/upload/v1694674022/Croma%20Assets/Communication/Mobiles/Images/300819_0_aunzde.png?tr=w-600"
-                    //     ],
-                    //     "otherDetails": [
-                    //       {"title": "RAM", "value": "12 GB"},
-                    //       {"title": "Storage", "value": "256 GB"},
-                    //       {"title": "Color", "value": "Black"}
-                    //     ]
-                    //   },
-                    //   {
-                    //     "pId": 2,
-                    //     "sTitile": "Motorola G84",
-                    //     "lTitile": "Motorola G84 Red, 12GB 128 GB",
-                    //     "discription": "This is a I Phone",
-                    //     "rating": 4.6,
-                    //     "price": 189999.50,
-                    //     "images": [
-                    //       "https://www.clove.co.uk/cdn/shop/files/MotoG845GMarshmallowBlue_2048x.jpg?v=1695140482",
-                    //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTT_OZQpP-YYpoKQxuBvgqW4qaPleWARQGV82Ov3QNibHBRulBkK5jt_Pc-xobzKGmYAXo&usqp=CAU"
-                    //     ],
-                    //     "otherDetails": [
-                    //       {"title": "RAM", "value": "12 GB"},
-                    //       {"title": "Storage", "value": "256 GB"},
-                    //       {"title": "Color", "value": "Red"}
-                    //     ]
-                    //   }
-                    // ];
+          Consumer(
+            builder: (ctx, ref, _) {
+              final isExist = ref.watch(isExistProvider);
+              return SizedBox(
+                height: 60,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    MainButton(
+                      label: isExist ? "Added to cart" : "Add to cart",
+                      buttonColor: const Color.fromRGBO(255, 255, 255, 1),
+                      onPressed: () {
+                        if (!isExist) {
+                          ref
+                              .read(addToCartProvider)
+                              .addToCart(product.docId)
+                              .then((value) {
+                            ref
+                                .read(isExistProvider.notifier)
+                                .isExist(product.docId);
+                          });
+                        }
+                      },
+                    ),
+                    MainButton(
+                      label: "Buy now",
+                      buttonColor: AppTheme.yellowColor,
+                      onPressed: () async {
+                        // final data = [
+                        //   {
+                        //     "pId": 1,
+                        //     "sTitile": "IPhone 14",
+                        //     "lTitile": "IPhone 11 236 GB Black",
+                        //     "discription":
+                        //         "With its sleek design, powerful processor, and stunning display, the iPhone is the perfect way to shop online.",
+                        //     "rating": 4.5,
+                        //     "price": 68444.50,
+                        //     "images": [
+                        //       "https://rukminim1.flixcart.com/image/850/1000/xif0q/mobile/1/d/y/-original-imaghxcpvtta2hzs.jpeg?q=90",
+                        //       "https://media-ik.croma.com/prod/https://media.croma.com/image/upload/v1694674022/Croma%20Assets/Communication/Mobiles/Images/300819_0_aunzde.png?tr=w-600"
+                        //     ],
+                        //     "otherDetails": [
+                        //       {"title": "RAM", "value": "12 GB"},
+                        //       {"title": "Storage", "value": "256 GB"},
+                        //       {"title": "Color", "value": "Black"}
+                        //     ]
+                        //   },
+                        //   {
+                        //     "pId": 2,
+                        //     "sTitile": "Motorola G84",
+                        //     "lTitile": "Motorola G84 Red, 12GB 128 GB",
+                        //     "discription": "This is a I Phone",
+                        //     "rating": 4.6,
+                        //     "price": 189999.50,
+                        //     "images": [
+                        //       "https://www.clove.co.uk/cdn/shop/files/MotoG845GMarshmallowBlue_2048x.jpg?v=1695140482",
+                        //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTT_OZQpP-YYpoKQxuBvgqW4qaPleWARQGV82Ov3QNibHBRulBkK5jt_Pc-xobzKGmYAXo&usqp=CAU"
+                        //     ],
+                        //     "otherDetails": [
+                        //       {"title": "RAM", "value": "12 GB"},
+                        //       {"title": "Storage", "value": "256 GB"},
+                        //       {"title": "Color", "value": "Red"}
+                        //     ]
+                        //   }
+                        // ];
 
-                    // final collection =
-                    //     FirebaseFirestore.instance.collection('Products');
-                    // for (var x in data) {
-                    //   await collection.add(x);
-                    // }
-                  },
+                        // final collection =
+                        //     FirebaseFirestore.instance.collection('Products');
+                        // for (var x in data) {
+                        //   await collection.add(x);
+                        // }
+                      },
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              );
+            },
           )
         ],
       ),

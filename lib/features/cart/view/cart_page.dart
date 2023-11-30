@@ -1,8 +1,11 @@
 import 'package:ecommerce_machine_test_jurysoft/common/widgets/main_button.dart';
 import 'package:ecommerce_machine_test_jurysoft/common/widgets/space.dart';
+import 'package:ecommerce_machine_test_jurysoft/features/cart/controller/cart_controller.dart';
+import 'package:ecommerce_machine_test_jurysoft/features/cart/data/model/cart_item_model.dart';
 import 'package:ecommerce_machine_test_jurysoft/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 
 class CartPage extends StatelessWidget {
@@ -12,15 +15,34 @@ class CartPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Expanded(
-            child: ListView.separated(
-          itemBuilder: (ctx, index) {
-            return CartItem();
+        Expanded(child: Consumer(
+          builder: (context, ref, _) {
+            final state = ref.watch(cartPageProvider);
+            if (state is CartData) {
+              final data = state.data;
+              if (data.isEmpty) {
+                return const Center(
+                  child: Text("Cart is empty"),
+                );
+              } else {
+                return ListView.separated(
+                  itemBuilder: (ctx, index) {
+                    return CartItem(
+                      cartItemModel: data[index],
+                    );
+                  },
+                  separatorBuilder: (ctx, index) {
+                    return Space.y(7);
+                  },
+                  itemCount: data.length,
+                );
+              }
+            } else {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
           },
-          separatorBuilder: (ctx, index) {
-            return Space.y(7);
-          },
-          itemCount: 10,
         )),
         Container(
           padding: EdgeInsets.symmetric(horizontal: 10),
@@ -28,13 +50,26 @@ class CartPage extends StatelessWidget {
           height: 60,
           child: Row(
             children: [
-              Expanded(
-                  child: Center(
-                child: Text(
-                  "₹670000",
-                  style: txt19BlackB,
-                ),
-              )),
+              Expanded(child: Consumer(builder: (context, ref, _) {
+                final state = ref.watch(cartPageProvider);
+                if (state is CartData) {
+                  double sum = 0.0;
+                  for (var x in state.data) {
+                    sum = sum + ((x.product.price) * x.qty);
+                  }
+                  return Center(
+                    child: Text(
+                      "₹$sum",
+                      style: txt19BlackB,
+                    ),
+                  );
+                } else {
+                  return const Center(
+                      child: CircularProgressIndicator(
+                    strokeWidth: 1,
+                  ));
+                }
+              })),
               MainButton(
                   widthFactor: 0.5,
                   label: "Place order",
@@ -49,16 +84,14 @@ class CartPage extends StatelessWidget {
 }
 
 class CartItem extends StatelessWidget {
-  const CartItem({
-    super.key,
-  });
-
+  const CartItem({super.key, required this.cartItemModel});
+  final CartItemModel cartItemModel;
   @override
   Widget build(BuildContext context) {
-    ValueNotifier<int> selectedNotifier = ValueNotifier(1);
+    ValueNotifier<int> selectedNotifier = ValueNotifier(cartItemModel.qty);
     var items = [1, 2, 3, 4, 5];
     return Container(
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       color: AppTheme.whiteColor,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -68,7 +101,7 @@ class CartItem extends StatelessWidget {
             width: 80,
             color: Colors.amber,
             child: Image.network(
-              "https://rukminim1.flixcart.com/image/850/1000/xif0q/mobile/1/d/y/-original-imaghxcpvtta2hzs.jpeg?q=90",
+              cartItemModel.product.images[0],
               fit: BoxFit.cover,
             ),
           ),
@@ -78,13 +111,13 @@ class CartItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Iphone',
+                  cartItemModel.product.sTitile,
                   style: txt15BlackSB,
                 ),
                 Space.y(5),
                 RatingBar.builder(
                   itemSize: 15,
-                  initialRating: 3.6,
+                  initialRating: cartItemModel.product.rating,
                   minRating: 1,
                   direction: Axis.horizontal,
                   allowHalfRating: true,
@@ -94,13 +127,11 @@ class CartItem extends StatelessWidget {
                     Icons.star,
                     color: Colors.green,
                   ),
-                  onRatingUpdate: (rating) {
-                    print(rating);
-                  },
+                  onRatingUpdate: (rating) {},
                 ),
                 Space.y(5),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 5),
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
                   height: 30,
                   decoration: BoxDecoration(
                       border:
@@ -108,7 +139,7 @@ class CartItem extends StatelessWidget {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(
+                      const Text(
                         'Qty: ',
                         style: txt12Black,
                       ),
@@ -117,27 +148,20 @@ class CartItem extends StatelessWidget {
                           builder: (context, selected, _) {
                             return DropdownButton(
                               style: txt12Black,
-                              underline: SizedBox.shrink(),
-                              // Initial Value
+                              underline: const SizedBox.shrink(),
                               value: selected,
-
-                              // Down Arrow Icon
-                              icon: const Icon(Icons.keyboard_arrow_down),
-
-                              // Array list of items
+                              icon: const Icon(
+                                Icons.keyboard_arrow_down,
+                                size: 18,
+                              ),
                               items: items.map((int items) {
                                 return DropdownMenuItem(
                                   value: items,
                                   child: Text("$items"),
                                 );
                               }).toList(),
-                              // After selecting the desired option,it will
-                              // change button value to selected value
                               onChanged: (int? newValue) {
                                 selectedNotifier.value = newValue!;
-                                // setState(() {
-                                //   dropdownvalue = newValue!;
-                                // });
                               },
                             );
                           }),
@@ -149,17 +173,17 @@ class CartItem extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "₹670000",
+                      "₹${cartItemModel.product.price * (cartItemModel.qty)}",
                       style: txt17BlackB,
                     ),
                     InkWell(
                       onTap: () {},
                       child: Container(
-                        padding: EdgeInsets.all(5),
+                        padding: const EdgeInsets.all(5),
                         decoration: BoxDecoration(
                             border: Border.all(
                                 width: 0.5, color: AppTheme.greyColor)),
-                        child: Row(
+                        child: const Row(
                           children: [
                             Icon(
                               Iconsax.trash,
