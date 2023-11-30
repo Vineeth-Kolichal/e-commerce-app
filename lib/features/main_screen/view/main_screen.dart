@@ -1,5 +1,6 @@
 import 'package:ecommerce_machine_test_jurysoft/features/home_page/view/screen/home_screen.dart';
 import 'package:ecommerce_machine_test_jurysoft/features/main_screen/controller/bottom_nav_controller.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
@@ -13,6 +14,12 @@ class MainScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("home"),
+        bottom: PreferredSize(
+            preferredSize: Size.fromHeight(40),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              child: CupertinoSearchTextField(),
+            )),
       ),
       body: HomeScreen(),
       bottomNavigationBar: BottomNavigationBar(
