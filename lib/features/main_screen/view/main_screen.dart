@@ -1,4 +1,4 @@
-import 'package:ecommerce_machine_test_jurysoft/features/cart/view/cart_controller.dart';
+import 'package:ecommerce_machine_test_jurysoft/features/cart/view/cart_page.dart';
 import 'package:ecommerce_machine_test_jurysoft/features/home_page/view/screen/home_screen.dart';
 import 'package:ecommerce_machine_test_jurysoft/features/main_screen/controller/bottom_nav_controller.dart';
 import 'package:flutter/cupertino.dart';

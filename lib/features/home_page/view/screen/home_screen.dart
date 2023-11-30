@@ -1,78 +1,89 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:ecommerce_machine_test_jurysoft/common/widgets/async_value_widget.dart';
+import 'package:ecommerce_machine_test_jurysoft/features/home_page/controller/home_data_controller.dart';
+import 'package:ecommerce_machine_test_jurysoft/features/home_page/data/models/product_list_model.dart';
 import 'package:ecommerce_machine_test_jurysoft/features/product_detailed_view/view/product_detailed_view.dart';
 import 'package:ecommerce_machine_test_jurysoft/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final value = ref.watch(homeDataProvider);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
-      child: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              child: CarouselSlider(
-                items: [
-                  BannerSlideItem(
-                    bgColor: const Color.fromARGB(255, 2, 66, 95),
+      child: AsyncValueWidget(
+        value: value,
+        data: (data) => CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: CarouselSlider(
+                  items: [
+                    BannerSlideItem(
+                      bgColor: const Color.fromARGB(255, 2, 66, 95),
+                    ),
+                    BannerSlideItem(
+                      bgColor: const Color.fromARGB(255, 7, 99, 175),
+                    ),
+                    BannerSlideItem(
+                      bgColor: const Color.fromARGB(255, 49, 125, 224),
+                    ),
+                  ],
+                  options: CarouselOptions(
+                    autoPlayInterval: Duration(seconds: 5),
+                    height: 180.0,
+                    enlargeCenterPage: true,
+                    autoPlay: true,
+                    aspectRatio: 16 / 9,
+                    autoPlayCurve: Curves.fastOutSlowIn,
+                    enableInfiniteScroll: true,
+                    autoPlayAnimationDuration:
+                        const Duration(milliseconds: 2000),
+                    viewportFraction: 1,
                   ),
-                  BannerSlideItem(
-                    bgColor: const Color.fromARGB(255, 7, 99, 175),
-                  ),
-                  BannerSlideItem(
-                    bgColor: const Color.fromARGB(255, 49, 125, 224),
-                  ),
-                ],
-                options: CarouselOptions(
-                  autoPlayInterval: Duration(seconds: 5),
-                  height: 180.0,
-                  enlargeCenterPage: true,
-                  autoPlay: true,
-                  aspectRatio: 16 / 9,
-                  autoPlayCurve: Curves.fastOutSlowIn,
-                  enableInfiniteScroll: true,
-                  autoPlayAnimationDuration: const Duration(milliseconds: 2000),
-                  viewportFraction: 1,
                 ),
               ),
             ),
-          ),
-          SliverGrid(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                return ProductGridItem();
-              },
-              childCount: 10,
+            SliverGrid(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  return ProductGridItem(
+                    product: data[index],
+                  );
+                },
+                childCount: data.length,
+              ),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: 7,
+                crossAxisSpacing: 7,
+                childAspectRatio: 0.63,
+              ),
             ),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisSpacing: 7,
-              crossAxisSpacing: 7,
-              childAspectRatio: 0.63,
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 }
 
 class ProductGridItem extends StatelessWidget {
-  const ProductGridItem({
-    super.key,
-  });
-
+  const ProductGridItem({super.key, required this.product});
+  final Product product;
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (ctx) => ProductDetailedView()));
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (ctx) => ProductDetailedView(
+                  product: product,
+                )));
       },
       child: Container(
         decoration: BoxDecoration(
@@ -89,45 +100,44 @@ class ProductGridItem extends StatelessWidget {
           ],
         ),
         alignment: Alignment.center,
-        //color: ,
         child: Column(
           children: [
             Expanded(
                 child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: Image.network(
-                'https://rukminim1.flixcart.com/image/850/1000/xif0q/mobile/1/d/y/-original-imaghxcpvtta2hzs.jpeg?q=90',
+                product.images[0],
                 fit: BoxFit.cover,
               ),
             )),
             LayoutBuilder(builder: (context, constraints) {
-              print("${constraints.maxWidth}");
               return Container(
-                padding: EdgeInsets.all(6),
+                padding: const EdgeInsets.all(6),
                 width: constraints.maxWidth,
                 height: 90,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Iphone",
+                      product.sTitile,
                       style: txt15BlackSB,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                     Text(
-                      'Apple I phone 14 (Blue, 124)',
+                      product.discription,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: txt12GreySB,
                     ),
                     Text(
-                      "₹670000",
+                      "₹${product.price}",
                       style: txt17BlackB,
                     ),
                     RatingBar.builder(
                       itemSize: 15,
-                      initialRating: 2.3,
+                      ignoreGestures: true,
+                      initialRating: product.rating,
                       minRating: 1,
                       direction: Axis.horizontal,
                       allowHalfRating: true,
@@ -137,9 +147,7 @@ class ProductGridItem extends StatelessWidget {
                         Icons.star,
                         color: Colors.green,
                       ),
-                      onRatingUpdate: (rating) {
-                        print(rating);
-                      },
+                      onRatingUpdate: (rating) {},
                     ),
                   ],
                 ),

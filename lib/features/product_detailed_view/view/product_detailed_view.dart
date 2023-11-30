@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecommerce_machine_test_jurysoft/common/widgets/main_button.dart';
 import 'package:ecommerce_machine_test_jurysoft/common/widgets/space.dart';
 import 'package:ecommerce_machine_test_jurysoft/features/product_detailed_view/controller/image_view_controller.dart';
 import 'package:ecommerce_machine_test_jurysoft/utils/theme.dart';
@@ -5,18 +7,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ProductDetailedView extends StatelessWidget {
-  const ProductDetailedView({
-    super.key,
-  });
+import '../../home_page/data/models/product_list_model.dart';
 
+class ProductDetailedView extends StatelessWidget {
+  const ProductDetailedView({super.key, required this.product});
+  final Product product;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    List<String> images = [
-      "https://rukminim1.flixcart.com/image/850/1000/xif0q/mobile/1/d/y/-original-imaghxcpvtta2hzs.jpeg?q=90",
-      "https://rukminim1.flixcart.com/image/850/1000/xif0q/mobile/1/d/y/-original-imaghxcpvtta2hzs.jpeg?q=90"
-    ];
+
     return Scaffold(
       appBar: AppBar(),
       body: Column(
@@ -32,7 +31,7 @@ class ProductDetailedView extends StatelessWidget {
                         // height: size.width,
                         width: size.width,
                         child: Image.network(
-                          images[index],
+                          product.images[index],
                           fit: BoxFit.cover,
                         ),
                       );
@@ -50,7 +49,7 @@ class ProductDetailedView extends StatelessWidget {
                         //width: double.infinity,
                         child: ListView.separated(
                           scrollDirection: Axis.horizontal,
-                          itemCount: images.length,
+                          itemCount: product.images.length,
                           shrinkWrap: true,
                           itemBuilder: (context, index) {
                             return Consumer(
@@ -74,7 +73,7 @@ class ProductDetailedView extends StatelessWidget {
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(5),
                                       child: Image.network(
-                                        images[index],
+                                        product.images[index],
                                         fit: BoxFit.cover,
                                       ),
                                     ),
@@ -89,8 +88,12 @@ class ProductDetailedView extends StatelessWidget {
                         ),
                       ),
                       Space.y(10),
-                      Text(" productModel.productName"),
+                      Text(
+                        product.lTitile,
+                        style: txt19BlackB,
+                      ),
                       RatingBar.builder(
+                        ignoreGestures: true,
                         itemSize: 20,
                         initialRating: 3.6,
                         minRating: 1,
@@ -103,9 +106,7 @@ class ProductDetailedView extends StatelessWidget {
                           Icons.star,
                           color: Colors.green,
                         ),
-                        onRatingUpdate: (rating) {
-                          print(rating);
-                        },
+                        onRatingUpdate: (rating) {},
                       ),
                       Space.y(10),
                       Row(
@@ -116,20 +117,20 @@ class ProductDetailedView extends StatelessWidget {
                           // ),
                           Space.x(5),
                           Text(
-                            '₹5500000',
+                            '₹${product.price}',
                             style: txt17BlackB,
                           )
                         ],
                       ),
-                      Text("productModel.productDiscription" * 10),
+                      Text(product.discription),
                       Space.y(10),
                     ],
                   ),
                 ),
-                Text('Other Details'),
+                const Text('Other Details'),
                 Column(
                   children: List.generate(
-                      10,
+                      product.otherDetails.length,
                       (index) => Container(
                             color: index % 2 != 0
                                 ? AppTheme.lightGreyColor1
@@ -141,7 +142,7 @@ class ProductDetailedView extends StatelessWidget {
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Text(
-                                      'SIM type',
+                                      product.otherDetails[index].title,
                                       style: txt12GreySM,
                                     ),
                                   ),
@@ -150,7 +151,8 @@ class ProductDetailedView extends StatelessWidget {
                                   width: size.width * 0.6,
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: Text("Dual sim"),
+                                    child:
+                                        Text(product.otherDetails[index].value),
                                   ),
                                 ),
                               ],
@@ -160,43 +162,67 @@ class ProductDetailedView extends StatelessWidget {
               ],
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              // Container(
-              //   height: size.width * 0.12,
-              //   width: size.width * 0.4,
-              //   decoration: BoxDecoration(
-              //     borderRadius: BorderRadius.circular(10),
-              //     border: Border.all(color: AppTheme.greyColor),
-              //   ),
-              //   child: Center(
-              //       child: Text(
-              //     'Add to cart',
-              //     style: txt17BlackB,
-              //   )),
-              // ),
-              MaterialButton(
-                onPressed: () {},
-                child: Text("Buy now"),
-              ),
-              Container(
-                margin: EdgeInsets.all(10),
-                height: size.width * 0.12,
-                width: size.width * 0.4,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: AppTheme.greyColor),
-                  color: Colors.yellow,
+          SizedBox(
+            height: 60,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                MainButton(
+                  label: "Add to cart",
+                  buttonColor: const Color.fromRGBO(255, 255, 255, 1),
+                  onPressed: () {},
                 ),
-                child: Center(
-                  child: Text(
-                    'Buy now',
-                    style: txt17BlackB,
-                  ),
+                MainButton(
+                  label: "Buy now",
+                  buttonColor: AppTheme.yellowColor,
+                  onPressed: () async {
+                    // final data = [
+                    //   {
+                    //     "pId": 1,
+                    //     "sTitile": "IPhone 14",
+                    //     "lTitile": "IPhone 11 236 GB Black",
+                    //     "discription":
+                    //         "With its sleek design, powerful processor, and stunning display, the iPhone is the perfect way to shop online.",
+                    //     "rating": 4.5,
+                    //     "price": 68444.50,
+                    //     "images": [
+                    //       "https://rukminim1.flixcart.com/image/850/1000/xif0q/mobile/1/d/y/-original-imaghxcpvtta2hzs.jpeg?q=90",
+                    //       "https://media-ik.croma.com/prod/https://media.croma.com/image/upload/v1694674022/Croma%20Assets/Communication/Mobiles/Images/300819_0_aunzde.png?tr=w-600"
+                    //     ],
+                    //     "otherDetails": [
+                    //       {"title": "RAM", "value": "12 GB"},
+                    //       {"title": "Storage", "value": "256 GB"},
+                    //       {"title": "Color", "value": "Black"}
+                    //     ]
+                    //   },
+                    //   {
+                    //     "pId": 2,
+                    //     "sTitile": "Motorola G84",
+                    //     "lTitile": "Motorola G84 Red, 12GB 128 GB",
+                    //     "discription": "This is a I Phone",
+                    //     "rating": 4.6,
+                    //     "price": 189999.50,
+                    //     "images": [
+                    //       "https://www.clove.co.uk/cdn/shop/files/MotoG845GMarshmallowBlue_2048x.jpg?v=1695140482",
+                    //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTT_OZQpP-YYpoKQxuBvgqW4qaPleWARQGV82Ov3QNibHBRulBkK5jt_Pc-xobzKGmYAXo&usqp=CAU"
+                    //     ],
+                    //     "otherDetails": [
+                    //       {"title": "RAM", "value": "12 GB"},
+                    //       {"title": "Storage", "value": "256 GB"},
+                    //       {"title": "Color", "value": "Red"}
+                    //     ]
+                    //   }
+                    // ];
+
+                    // final collection =
+                    //     FirebaseFirestore.instance.collection('Products');
+                    // for (var x in data) {
+                    //   await collection.add(x);
+                    // }
+                  },
                 ),
-              )
-            ],
+              ],
+            ),
           )
         ],
       ),

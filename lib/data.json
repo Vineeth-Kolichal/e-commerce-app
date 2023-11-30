@@ -1,24 +1,56 @@
 {
-    "products":[
+    "products": [
         {
-            "pId":1,
-            "sTitile":"IPhone",
-            "lTitile":"IPhone 11 236 GB Black",
-            "discription":"This is a I Phone",
-            "rating":4.5,
-            "price":68444.50,
-            "images":["image1","image2"],
-            "otherDetails":[{"title":"key","value":"value"},{"title":"key","value":"value"},{"title":"key","value":"value"}]
+            "pId": 1,
+            "sTitile": "IPhone 14",
+            "lTitile": "IPhone 11 236 GB Black",
+            "discription": "With its sleek design, powerful processor, and stunning display, the iPhone is the perfect way to shop online.",
+            "rating": 4.5,
+            "price": 68444.50,
+            "images": [
+                "https://rukminim1.flixcart.com/image/850/1000/xif0q/mobile/1/d/y/-original-imaghxcpvtta2hzs.jpeg?q=90",
+                "https://media-ik.croma.com/prod/https://media.croma.com/image/upload/v1694674022/Croma%20Assets/Communication/Mobiles/Images/300819_0_aunzde.png?tr=w-600"
+            ],
+            "otherDetails": [
+                {
+                    "title": "RAM",
+                    "value": "12 GB"
+                },
+                {
+                    "title": "Storage",
+                    "value": "256 GB"
+                },
+                {
+                    "title": "Color",
+                    "value": "Black"
+                }
+            ]
         },
         {
-            "pId":1,
-            "sTitile":"IPhone",
-            "lTitile":"IPhone 11 236 GB Black",
-            "discription":"This is a I Phone",
-            "rating":4.5,
-            "price":68444.50,
-            "images":["image1","image2"],
-            "otherDetails":[{"title":"key","value":"value"},{"title":"key","value":"value"},{"title":"key","value":"value"}]
+            "pId": 2,
+            "sTitile": "Motorola G84",
+            "lTitile": "Motorola G84 Red, 12GB 128 GB",
+            "discription": "This is a I Phone",
+            "rating": 4.6,
+            "price": 189999.50,
+            "images": [
+                "https://www.clove.co.uk/cdn/shop/files/MotoG845GMarshmallowBlue_2048x.jpg?v=1695140482",
+                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTT_OZQpP-YYpoKQxuBvgqW4qaPleWARQGV82Ov3QNibHBRulBkK5jt_Pc-xobzKGmYAXo&usqp=CAU"
+            ],
+            "otherDetails": [
+                {
+                    "title": "RAM",
+                    "value": "12 GB"
+                },
+                {
+                    "title": "Storage",
+                    "value": "256 GB"
+                },
+                {
+                    "title": "Color",
+                    "value": "Red"
+                }
+            ]
         }
     ]
 }

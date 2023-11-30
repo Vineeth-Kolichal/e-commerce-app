@@ -1,5 +1,6 @@
 import 'package:ecommerce_machine_test_jurysoft/features/home_page/view/screen/home_screen.dart';
 import 'package:ecommerce_machine_test_jurysoft/features/main_screen/view/main_screen.dart';
+import 'package:ecommerce_machine_test_jurysoft/utils/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -21,10 +23,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'E- Commerce application',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+      theme: AppTheme.theme,
       home: MainScreen(),
     );
   }
