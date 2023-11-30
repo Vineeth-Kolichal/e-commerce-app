@@ -1,10 +1,24 @@
 {
-    "pId":1,
-    "sTitile":"IPhone",
-    "lTitile":"IPhone 11 236 GB Black",
-    "discription":"This is a I Phone",
-    "rating":4.5,
-    "price":68444.50,
-    "images":["image1","image2"],
-    "otherDetails":[{"title":"key","value":"value"},{"title":"key","value":"value"},{"title":"key","value":"value"}]
+    "products":[
+        {
+            "pId":1,
+            "sTitile":"IPhone",
+            "lTitile":"IPhone 11 236 GB Black",
+            "discription":"This is a I Phone",
+            "rating":4.5,
+            "price":68444.50,
+            "images":["image1","image2"],
+            "otherDetails":[{"title":"key","value":"value"},{"title":"key","value":"value"},{"title":"key","value":"value"}]
+        },
+        {
+            "pId":1,
+            "sTitile":"IPhone",
+            "lTitile":"IPhone 11 236 GB Black",
+            "discription":"This is a I Phone",
+            "rating":4.5,
+            "price":68444.50,
+            "images":["image1","image2"],
+            "otherDetails":[{"title":"key","value":"value"},{"title":"key","value":"value"},{"title":"key","value":"value"}]
+        }
+    ]
 }
