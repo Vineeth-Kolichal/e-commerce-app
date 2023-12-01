@@ -2,6 +2,7 @@ import 'package:ecommerce_machine_test_jurysoft/common/widgets/cart_item_widget.
 import 'package:ecommerce_machine_test_jurysoft/common/widgets/main_button.dart';
 import 'package:ecommerce_machine_test_jurysoft/common/widgets/space.dart';
 import 'package:ecommerce_machine_test_jurysoft/features/cart/data/model/cart_item_model.dart';
+import 'package:ecommerce_machine_test_jurysoft/features/checkout/controller/payment_method_controller.dart';
 import 'package:ecommerce_machine_test_jurysoft/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -72,13 +73,14 @@ class CheckoutScreen extends ConsumerWidget {
   }
 }
 
-class PaymentMethods extends StatelessWidget {
+class PaymentMethods extends ConsumerWidget {
   const PaymentMethods({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final payment = ref.watch(paymentMethodProvider);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -87,7 +89,9 @@ class PaymentMethods extends StatelessWidget {
           const Text("Select payment method"),
           Space.y(20),
           InkWell(
-            onTap: () {},
+            onTap: () {
+              ref.read(paymentMethodProvider.notifier).state = 0;
+            },
             child: Container(
               decoration: BoxDecoration(
                 color: AppTheme.whiteColor,
@@ -109,7 +113,9 @@ class PaymentMethods extends StatelessWidget {
                         const Text('Cash on delivery'),
                       ],
                     ),
-                    Icon(Icons.radio_button_off),
+                    Icon(payment == 0
+                        ? Icons.radio_button_checked
+                        : Icons.radio_button_off),
                   ],
                 ),
               ),
@@ -117,7 +123,9 @@ class PaymentMethods extends StatelessWidget {
           ),
           Space.y(10),
           InkWell(
-            onTap: () {},
+            onTap: () {
+              ref.read(paymentMethodProvider.notifier).state = 1;
+            },
             child: Container(
               decoration: BoxDecoration(
                 color: AppTheme.whiteColor,
@@ -140,7 +148,9 @@ class PaymentMethods extends StatelessWidget {
                         const Text('Razorpay'),
                       ],
                     ),
-                    Icon(Icons.radio_button_off),
+                    Icon(payment == 1
+                        ? Icons.radio_button_checked
+                        : Icons.radio_button_off),
                   ],
                 ),
               ),
