@@ -1,11 +1,8 @@
-
 import 'package:ecommerce_machine_test_jurysoft/common/widgets/space.dart';
 import 'package:ecommerce_machine_test_jurysoft/features/home_page/data/models/product_list_model.dart';
-import 'package:ecommerce_machine_test_jurysoft/features/product_detailed_view/controller/image_view_controller.dart';
 import 'package:ecommerce_machine_test_jurysoft/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ImageListComponent extends StatelessWidget {
   const ImageListComponent({
@@ -17,11 +14,29 @@ class ImageListComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ValueNotifier<int> imageNotifier = ValueNotifier(0);
+    Size size = MediaQuery.of(context).size;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Column(children: [
+            ValueListenableBuilder(
+              valueListenable: imageNotifier,
+              builder: (context, index, _) {
+                return SizedBox(
+                  height: size.width,
+                  width: size.width,
+                  child: Image.network(
+                    product.images[index],
+                    fit: BoxFit.cover,
+                  ),
+                );
+              },
+            )
+          ]),
+          Space.y(10),
           SizedBox(
             height: 50,
             child: ListView.separated(
@@ -29,13 +44,12 @@ class ImageListComponent extends StatelessWidget {
               itemCount: product.images.length,
               shrinkWrap: true,
               itemBuilder: (context, index) {
-                return Consumer(
-                  builder: (context, ref, _) {
-                    int selected = ref.watch(imageViewProvider);
+                return ValueListenableBuilder(
+                  valueListenable: imageNotifier,
+                  builder: (context, selected, _) {
                     return InkWell(
                       onTap: () {
-                        ref.read(imageViewProvider.notifier).state =
-                            index;
+                        imageNotifier.value = index;
                       },
                       child: Container(
                         height: 50,
@@ -43,10 +57,8 @@ class ImageListComponent extends StatelessWidget {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
                             border: (selected == index)
-                                ? Border.all(
-                                    width: 2, color: Colors.blue)
-                                : Border.all(
-                                    width: 1, color: Colors.grey)),
+                                ? Border.all(width: 2, color: Colors.blue)
+                                : Border.all(width: 1, color: Colors.grey)),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(5),
                           child: Image.network(
@@ -77,8 +89,7 @@ class ImageListComponent extends StatelessWidget {
             direction: Axis.horizontal,
             allowHalfRating: true,
             itemCount: 5,
-            itemPadding:
-                const EdgeInsets.symmetric(horizontal: 0.0),
+            itemPadding: const EdgeInsets.symmetric(horizontal: 0.0),
             itemBuilder: (context, _) => const Icon(
               Icons.star,
               color: Colors.green,
