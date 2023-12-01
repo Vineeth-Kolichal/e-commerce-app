@@ -10,6 +10,7 @@ class AppTheme {
   static const blackColor = Colors.black;
   static const redColor = Colors.red;
   static const yellowColor = Colors.yellow;
+  static const blueColor = Colors.blue;
   static const greyColor = Colors.grey;
   static const darkGreyColor1 = Color.fromARGB(255, 83, 83, 83);
   static const lightGreyColor1 = Color(0xFFEEEDED);
@@ -27,3 +28,7 @@ const txt12GreySM = TextStyle(
     fontSize: 12, fontWeight: FontWeight.w300, color: AppTheme.darkGreyColor1);
 const txt12Black = TextStyle(
     fontSize: 12, fontWeight: FontWeight.w500, color: AppTheme.blackColor);
+const txt14White = TextStyle(
+    fontSize: 14, fontWeight: FontWeight.w500, color: AppTheme.whiteColor);
+const txt16Black = TextStyle(
+    fontSize: 16, fontWeight: FontWeight.w500, color: AppTheme.blackColor);

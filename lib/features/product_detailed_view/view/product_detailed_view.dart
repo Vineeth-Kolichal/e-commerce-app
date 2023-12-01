@@ -187,8 +187,8 @@ class ProductDetailedView extends ConsumerWidget {
                       label: "Buy now",
                       buttonColor: AppTheme.yellowColor,
                       onPressed: () async {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (ctx) => CheckoutScreen()));
+                        // Navigator.of(context).push(MaterialPageRoute(
+                        //     builder: (ctx) => CheckoutScreen()));
                         // final data = [
                         //   {
                         //     "pId": 1,
