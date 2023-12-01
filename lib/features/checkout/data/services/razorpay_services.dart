@@ -30,18 +30,6 @@ class RazorpayServices {
         'wallets': ['paytm']
       }
     };
-    //String orderPlacedDate = DateTime.now().toString();
-    // orderModel = OrderModell(
-    //   cartlist: cartList,
-    //   paymentId: paymentId,
-    //   discription: description,
-    //   address: address,
-    //   israzorpay: true,
-    //   userid: userId,
-    //   totalPrice: totalPrice,
-    //   orderStatus: 'order plced',
-    //   orderPlacedDate: orderPlacedDate,
-    // );
 
     try {
       razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, successResp);

@@ -67,6 +67,8 @@ class CheckoutScreen extends ConsumerWidget {
                       } else {
                         int paymentType = ref.watch(paymentMethodProvider);
                         if (paymentType == 0) {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (ctx) => const SuccessScreen()));
                         } else {
                           final totalAmout = (total * 100).toInt();
                           ref.read(razorServiceProvider).pay(
