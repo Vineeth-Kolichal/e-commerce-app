@@ -12,14 +12,11 @@ class RazorpayServices {
   static const String apiKey = 'rzp_test_iB6csD8z6wRUYu';
   RazorpayServices(this.razorpay);
 
-  void successPayment() {
-    //razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, successCallback);
-    razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
-    razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, errorCallback);
-    razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, externalWalletCallback);
-  }
-
-  Future<void> pay(int amountInPaisa) async {
+  Future<void> pay({
+    required int amountInPaisa,
+    required Function(PaymentSuccessResponse response) successResp,
+    required Function(PaymentFailureResponse response) failiureResp,
+  }) async {
     Map<String, dynamic> options = {
       'key': apiKey,
       'amount': amountInPaisa,
@@ -47,22 +44,13 @@ class RazorpayServices {
     // );
 
     try {
-      razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
-      razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, errorCallback);
+      razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, successResp);
+      razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, failiureResp);
       razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, externalWalletCallback);
       razorpay.open(options);
     } catch (e) {
       log(e.toString());
     }
-  }
-
-  //Payment is success
-  void _handlePaymentSuccess(PaymentSuccessResponse response) async {
-    log(response.orderId.toString());
-  }
-
-  void errorCallback(PaymentFailureResponse response) {
-    log(response.toString());
   }
 
   void externalWalletCallback(ExternalWalletResponse response) {

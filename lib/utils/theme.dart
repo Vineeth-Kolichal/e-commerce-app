@@ -10,6 +10,7 @@ class AppTheme {
   static const blackColor = Colors.black;
   static const redColor = Colors.red;
   static const yellowColor = Colors.yellow;
+  static const greenColor = Colors.green;
   static const blueColor = Colors.blue;
   static const greyColor = Colors.grey;
   static const darkGreyColor1 = Color.fromARGB(255, 83, 83, 83);
