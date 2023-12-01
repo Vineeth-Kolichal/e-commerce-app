@@ -32,7 +32,8 @@ class CheckoutScreen extends ConsumerWidget {
                       if (step == 1)
                         CheckoutItems(
                           cartItemModelList: cartItemModelList,
-                        )
+                        ),
+                      if (step == 2) const PaymentMethods()
                     ],
                   );
                 }),
@@ -71,6 +72,86 @@ class CheckoutScreen extends ConsumerWidget {
   }
 }
 
+class PaymentMethods extends StatelessWidget {
+  const PaymentMethods({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text("Select payment method"),
+          Space.y(20),
+          InkWell(
+            onTap: () {},
+            child: Container(
+              decoration: BoxDecoration(
+                color: AppTheme.whiteColor,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SizedBox(
+                          height: 20,
+                          width: 30,
+                          child: Image.asset('assets/images/cash.png'),
+                        ),
+                        const Text('Cash on delivery'),
+                      ],
+                    ),
+                    Icon(Icons.radio_button_off),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Space.y(10),
+          InkWell(
+            onTap: () {},
+            child: Container(
+              decoration: BoxDecoration(
+                color: AppTheme.whiteColor,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SizedBox(
+                          height: 20,
+                          width: 30,
+                          child: Image.asset('assets/images/razor.png'),
+                        ),
+                        Space.x(5),
+                        const Text('Razorpay'),
+                      ],
+                    ),
+                    Icon(Icons.radio_button_off),
+                  ],
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
 class CheckoutItems extends StatelessWidget {
   const CheckoutItems({super.key, required this.cartItemModelList});
   final List<CartItemModel> cartItemModelList;
@@ -81,6 +162,7 @@ class CheckoutItems extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Space.y(10),
           const Text("  Order summery"),
           Space.y(10),
           Expanded(
