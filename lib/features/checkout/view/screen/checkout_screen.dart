@@ -1,6 +1,7 @@
 import 'package:ecommerce_machine_test_jurysoft/common/widgets/main_button.dart';
 import 'package:ecommerce_machine_test_jurysoft/features/cart/data/model/cart_item_model.dart';
 import 'package:ecommerce_machine_test_jurysoft/features/checkout/controller/payment_method_controller.dart';
+import 'package:ecommerce_machine_test_jurysoft/features/checkout/data/services/clear_cart_service.dart';
 import 'package:ecommerce_machine_test_jurysoft/features/checkout/data/services/razorpay_services.dart';
 import 'package:ecommerce_machine_test_jurysoft/features/checkout/view/screen/succes_screen.dart';
 import 'package:ecommerce_machine_test_jurysoft/utils/theme.dart';
@@ -11,9 +12,13 @@ import '../components/export_components.dart';
 
 class CheckoutScreen extends ConsumerWidget {
   const CheckoutScreen(
-      {super.key, required this.cartItemModelList, required this.total});
+      {super.key,
+      required this.cartItemModelList,
+      required this.total,
+      this.isDirectBuy = false});
   final double total;
   final List<CartItemModel> cartItemModelList;
+  final bool isDirectBuy;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ValueNotifier<int> stepNotifier = ValueNotifier(0);
@@ -72,12 +77,44 @@ class CheckoutScreen extends ConsumerWidget {
                         } else {
                           final totalAmout = (total * 100).toInt();
                           ref.read(razorServiceProvider).pay(
-                              amountInPaisa: totalAmout,
-                              successResp: (resp) {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (ctx) => const SuccessScreen()));
-                              },
-                              failiureResp: (resp) {});
+                                amountInPaisa: totalAmout,
+                                successResp: (resp) {
+                                  if (isDirectBuy) {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (ctx) =>
+                                                const SuccessScreen()));
+                                  } else {
+                                    ref
+                                        .read(clearCartServiceProvider)
+                                        .clearCartItems(cartItemModelList)
+                                        .then((value) {
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (ctx) =>
+                                                  const SuccessScreen()));
+                                    });
+                                  }
+                                },
+                                failiureResp: (resp) {
+                                  showDialog(
+                                    context: context,
+                                    builder: (ctx) => AlertDialog(
+                                      title: const Text("Payment failed"),
+                                      content: const Text(
+                                          'Please try after some time'),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(ctx).pop();
+                                          },
+                                          child: const Text('Close'),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              );
                         }
                       }
                     })

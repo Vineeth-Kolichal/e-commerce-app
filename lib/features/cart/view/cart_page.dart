@@ -1,21 +1,19 @@
 import 'package:ecommerce_machine_test_jurysoft/common/widgets/main_button.dart';
 import 'package:ecommerce_machine_test_jurysoft/common/widgets/space.dart';
 import 'package:ecommerce_machine_test_jurysoft/features/cart/controller/cart_controller.dart';
-import 'package:ecommerce_machine_test_jurysoft/features/cart/data/model/cart_item_model.dart';
 import 'package:ecommerce_machine_test_jurysoft/features/checkout/view/screen/checkout_screen.dart';
 import 'package:ecommerce_machine_test_jurysoft/utils/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:iconsax/iconsax.dart';
 
 import '../../../common/widgets/cart_item_widget.dart';
 
-class CartPage extends StatelessWidget {
+class CartPage extends ConsumerWidget {
   const CartPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    ref.read(cartPageProvider.notifier).getCartItems();
     return Column(
       children: [
         Expanded(child: Consumer(

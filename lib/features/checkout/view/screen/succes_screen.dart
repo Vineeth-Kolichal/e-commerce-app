@@ -39,7 +39,7 @@ class SuccessScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 25),
             MainButton(
-              label: "Continue Shottping",
+              label: "Continue Shopping",
               buttonColor: AppTheme.whiteColor,
               onPressed: () {
                 ref.read(bottomNavProvider.notifier).state = 0;

@@ -10,9 +10,7 @@ final cartPageProvider =
 
 class CartController extends StateNotifier<CartState> {
   final CartServices cartServices;
-  CartController(this.cartServices) : super(CartLoading()) {
-    getCartItems();
-  }
+  CartController(this.cartServices) : super(CartLoading());
   Future<void> getCartItems() async {
     final data = await cartServices.getAllCartItems();
     state = CartData(data: data);
