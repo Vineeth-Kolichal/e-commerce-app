@@ -3,6 +3,7 @@ import 'package:ecommerce_machine_test_jurysoft/common/widgets/main_button.dart'
 import 'package:ecommerce_machine_test_jurysoft/common/widgets/space.dart';
 import 'package:ecommerce_machine_test_jurysoft/features/cart/data/model/cart_item_model.dart';
 import 'package:ecommerce_machine_test_jurysoft/features/checkout/controller/payment_method_controller.dart';
+import 'package:ecommerce_machine_test_jurysoft/features/checkout/data/services/razorpay_services.dart';
 import 'package:ecommerce_machine_test_jurysoft/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -62,6 +63,13 @@ class CheckoutScreen extends ConsumerWidget {
                         stepNotifier.value = 1;
                       } else if (stepNotifier.value == 1) {
                         stepNotifier.value = 2;
+                      } else {
+                        int paymentType = ref.watch(paymentMethodProvider);
+                        if (paymentType == 0) {
+                        } else {
+                          final totalAmout = (total * 100).toInt();
+                          ref.read(razorServiceProvider).pay(totalAmout);
+                        }
                       }
                     })
               ],
