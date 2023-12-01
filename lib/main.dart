@@ -1,4 +1,3 @@
-import 'package:ecommerce_machine_test_jurysoft/features/home_page/view/screen/home_screen.dart';
 import 'package:ecommerce_machine_test_jurysoft/features/main_screen/view/main_screen.dart';
 import 'package:ecommerce_machine_test_jurysoft/utils/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -18,13 +17,13 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'E- Commerce application',
       theme: AppTheme.theme,
-      home: MainScreen(),
+      home: const MainScreen(),
     );
   }
 }

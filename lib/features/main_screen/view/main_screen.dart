@@ -14,25 +14,39 @@ class MainScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     int index = ref.watch(bottomNavProvider);
-    List<Widget> pages = [HomeScreen(), Container(), CartPage(), Container()];
+    List<String> titles = ["e-ShoppingCart", "Whishlist", "Cart", "Profile"];
+    List<Widget> pages = const [
+      HomeScreen(),
+      WishlistPage(),
+      CartPage(),
+      ProfilePage()
+    ];
     return Scaffold(
       appBar: AppBar(
-        title: Text("home"),
-        bottom: PreferredSize(
-            preferredSize: Size.fromHeight(40),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              child: CupertinoSearchTextField(),
-            )),
+        title: Text(titles[index]),
+        actions: const [
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Icon(Icons.notifications_active),
+          )
+        ],
+        bottom: index == 0
+            ? const PreferredSize(
+                preferredSize: Size.fromHeight(40),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  child: CupertinoSearchTextField(),
+                ))
+            : null,
       ),
       body: pages[index],
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             label: "Home",
             icon: Icon(Iconsax.home),
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             label: "Wishlist",
             icon: Icon(Iconsax.heart),
           ),
@@ -81,7 +95,7 @@ class MainScreen extends ConsumerWidget {
             ),
             label: "Cart",
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Iconsax.user),
             label: "Profile",
           ),
@@ -96,6 +110,32 @@ class MainScreen extends ConsumerWidget {
           ref.read(bottomNavProvider.notifier).state = index;
         },
         elevation: 5,
+      ),
+    );
+  }
+}
+
+class ProfilePage extends StatelessWidget {
+  const ProfilePage({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
+class WishlistPage extends StatelessWidget {
+  const WishlistPage({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: Text(
+        'Whishlist is empty',
       ),
     );
   }

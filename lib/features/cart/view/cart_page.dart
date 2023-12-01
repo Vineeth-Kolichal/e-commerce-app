@@ -46,7 +46,7 @@ class CartPage extends ConsumerWidget {
           },
         )),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           color: AppTheme.whiteColor,
           height: 60,
           child: Consumer(builder: (context, ref, _) {
@@ -73,18 +73,22 @@ class CartPage extends ConsumerWidget {
                             strokeWidth: 1,
                           ))),
                 MainButton(
-                    widthFactor: 0.5,
-                    label: "Place order",
-                    buttonColor: AppTheme.yellowColor,
-                    onPressed: () {
-                      if (state is CartData) {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (ctx) => CheckoutScreen(
-                                  cartItemModelList: state.data,
-                                  total: sum,
-                                )));
-                      }
-                    })
+                  widthFactor: 0.5,
+                  label: "Place order",
+                  buttonColor: AppTheme.yellowColor,
+                  onPressed: () {
+                    if (state is CartData && state.data.isNotEmpty) {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (ctx) => CheckoutScreen(
+                            cartItemModelList: state.data,
+                            total: sum,
+                          ),
+                        ),
+                      );
+                    }
+                  },
+                )
               ],
             );
           }),

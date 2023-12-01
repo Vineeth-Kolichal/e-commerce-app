@@ -21,7 +21,7 @@ class RazorpayServices {
       'key': apiKey,
       'amount': amountInPaisa,
       'currency': 'INR',
-      'name': 'e-Shopping',
+      'name': 'e-ShoppingCart',
       'description': "description",
       'retry': {'enabled': true, 'max_count': 1},
       'send_sms_hash': true,
