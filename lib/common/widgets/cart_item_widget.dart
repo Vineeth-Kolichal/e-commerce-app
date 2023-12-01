@@ -23,10 +23,9 @@ class CartItem extends ConsumerWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
+          SizedBox(
             height: 110,
             width: 100,
-            color: Colors.amber,
             child: Image.network(
               cartItemModel.product.images[0],
               fit: BoxFit.cover,
