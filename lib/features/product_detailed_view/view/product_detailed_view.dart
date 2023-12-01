@@ -31,7 +31,7 @@ class ProductDetailedView extends ConsumerWidget {
                     builder: (context, ref, _) {
                       int index = ref.watch(imageViewProvider);
                       return SizedBox(
-                        // height: size.width,
+                        height: size.width,
                         width: size.width,
                         child: Image.network(
                           product.images[index],
