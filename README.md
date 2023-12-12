@@ -1,4 +1,4 @@
-# ecommerce_machine_test_jurysoft
+# ecommerce_app_sample
 
 
 ## Tools and technologies used
